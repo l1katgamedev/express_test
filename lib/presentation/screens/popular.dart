@@ -1,30 +1,46 @@
-import 'package:express_test/bloc/trending/trending_bloc.dart';
+import 'dart:developer';
+
+import 'package:express_test/bloc/popular/movie_bloc.dart';
+import 'package:express_test/presentation/screens/movie_detail.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class TrendingScreen extends StatefulWidget {
-  static const routeName = "/trending";
+class PopularScreen extends StatefulWidget {
+  static const routeName = "/popular";
 
-  const TrendingScreen({Key? key}) : super(key: key);
+  const PopularScreen({Key? key}) : super(key: key);
 
   @override
-  State<TrendingScreen> createState() => _TrendingScreenState();
+  State<PopularScreen> createState() => _PopularScreenState();
 }
 
-class _TrendingScreenState extends State<TrendingScreen> {
+class _PopularScreenState extends State<PopularScreen> {
+
   @override
   void initState() {
-    final TrendingBloc bloc = BlocProvider.of<TrendingBloc>(context);
-    if(bloc.state is! TrendingLoadedState) bloc.add(TrendingLoadEvent());
+    final MovieBloc bloc = BlocProvider.of<MovieBloc>(context);
+    if (bloc.state is! MoviesLoadedState) bloc.add(MoviesLoadEvent());
     super.initState();
   }
+
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: BlocBuilder<TrendingBloc, TrendingState>(
+      body: RefreshIndicator(
+          onRefresh: () {
+        return Future.delayed(const Duration(seconds: 1), () {
+          final MovieBloc bloc = BlocProvider.of<MovieBloc>(context);
+          bloc.add(MoviesLoadEvent());
+        });
+      }, child: BlocBuilder<MovieBloc, MovieState>(
         builder: (context, state) {
-          if (state is TrendingLoadedState) {
+          if (state is MoviesLoadingState) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+          if (state is MoviesLoadedState) {
             return Column(
               children: [
                 Flexible(
@@ -50,19 +66,10 @@ class _TrendingScreenState extends State<TrendingScreen> {
                                         'https://image.tmdb.org/t/p/w500/${item.poster}'),
                                     height: 240,
                                     fit: BoxFit.cover,
-                                    child: InkWell(
-                                      onTap: () {
-                                        /*Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) =>
-                                            MovieDetailScreen(
-                                              movieId: movies[index].id,
-                                              movieService: movieService,
-                                            ),
-                                      ),*/
-                                      },
-                                    ),
+                                    child: InkWell(onTap: () {
+                                      log("${item.id}");
+                                      Navigator.push(context, MaterialPageRoute(builder: (context) => MovieDetailScreen(movieId: state.movies[index].id,)));
+                                    }),
                                   ),
                                   Positioned(
                                     right: 10,
@@ -90,8 +97,7 @@ class _TrendingScreenState extends State<TrendingScreen> {
                                                 style: const TextStyle(
                                                     color: Colors.white,
                                                     fontSize: 16,
-                                                    fontWeight:
-                                                        FontWeight.w600),
+                                                    fontWeight: FontWeight.w600),
                                               ),
                                             ],
                                           ),
@@ -117,8 +123,8 @@ class _TrendingScreenState extends State<TrendingScreen> {
                                 height: 8,
                               ),
                               Padding(
-                                padding: const EdgeInsets.all(12)
-                                    .copyWith(bottom: 0),
+                                padding:
+                                    const EdgeInsets.all(12).copyWith(bottom: 0),
                                 child: Text(
                                   item.description,
                                   maxLines: 3,
@@ -130,8 +136,7 @@ class _TrendingScreenState extends State<TrendingScreen> {
                                 height: 8,
                               ),
                               Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
                                   Padding(
                                     padding:
@@ -178,13 +183,11 @@ class _TrendingScreenState extends State<TrendingScreen> {
             );
           }
 
-          if (state is TrendingLoadingState) {
-            return const Center(child: CircularProgressIndicator());
-          }
-
-          return const Center(child: Text("Ошибка сети"));
+          return const Center(
+            child: Text("Нету попульрных фильмов"),
+          );
         },
-      ),
+      )),
     );
   }
 }

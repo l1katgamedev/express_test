@@ -1,8 +1,9 @@
-import 'package:express_test/screens/popular.dart';
-import 'package:express_test/screens/trending.dart';
-import 'package:express_test/screens/upcoming.dart';
+import 'package:express_test/presentation/screens/popular.dart';
+import 'package:express_test/presentation/screens/trending.dart';
+import 'package:express_test/presentation/screens/upcoming.dart';
 import 'package:express_test/utils.dart';
 import 'package:flutter/material.dart';
+
 
 class MoviesTabWidget extends StatefulWidget {
   const MoviesTabWidget({Key? key}) : super(key: key);

@@ -2,15 +2,12 @@ import 'package:express_test/bloc/movie_detail/movie_detail_bloc.dart';
 import 'package:express_test/bloc/popular/movie_bloc.dart';
 import 'package:express_test/bloc/trending/trending_bloc.dart';
 import 'package:express_test/bloc/upcoming/upcoming_bloc.dart';
-import 'package:express_test/screens/home.dart';
-import 'package:express_test/screens/movie_detail.dart';
-import 'package:express_test/screens/popular.dart';
+import 'package:express_test/home.dart';
+import 'package:express_test/presentation/screens/splash.dart';
 import 'package:express_test/services/repository.dart';
-import 'package:express_test/screens/splash.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:provider/provider.dart';
 
 import 'bloc/cast/cast_bloc.dart';
 import 'bloc/cast_detail/cast_detail_bloc.dart';
@@ -74,7 +71,6 @@ class _AppState extends State<App> {
           routes: {
             SplashScreen.routeName: (context) => const SplashScreen(),
             HomePage.routeName: (context) => const HomePage(),
-            '/movieDetail': (context) => MovieDetailScreen(),
           },
         ),
       );

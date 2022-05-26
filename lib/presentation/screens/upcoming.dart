@@ -1,4 +1,5 @@
 import 'package:express_test/bloc/upcoming/upcoming_bloc.dart';
+import 'package:express_test/presentation/screens/movie_detail.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -52,15 +53,7 @@ class _UpcomingScreenState extends State<UpcomingScreen> {
                                     fit: BoxFit.cover,
                                     child: InkWell(
                                       onTap: () {
-                                        /*Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) =>
-                                            MovieDetailScreen(
-                                              movieId: movies[index].id,
-                                              movieService: movieService,
-                                            ),
-                                      ),*/
+                                        Navigator.push(context, MaterialPageRoute(builder: (context) => MovieDetailScreen(movieId: item.id,)));
                                       },
                                     ),
                                   ),
